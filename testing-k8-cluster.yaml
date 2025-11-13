@@ -4,10 +4,11 @@ kind: ClusterConfig
 metadata:
   name: testing-eks-cluster
   region: us-east-1
-  version: "1.32"    
+  version: "1.32"
+
 
 iam:
-  withOIDC: true     # enable OIDC provider automatically
+  withOIDC: true
 
 vpc:
   autoAllocateIPv6: false
@@ -27,24 +28,21 @@ addons:
 managedNodeGroups:
   - name: arm-ng
     instanceType: m6g.medium
-    amiFamily: AmazonLinux2023     # use modern AL2023 (AL2 is being deprecated)
+    amiFamily: AmazonLinux2023
     desiredCapacity: 2
     minSize: 1
     maxSize: 3
     volumeSize: 20
     ssh:
-      allow: false                 # disable SSH key login
+      allow: false
     iam:
       attachPolicyARNs:
-        # Required for node registration and networking
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
         - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-        # Allow SSM Session Manager login
         - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
     tags:
       Name: arm-ng
-      owner: linuxautobot
     labels:
       arch: arm64
       role: worker
