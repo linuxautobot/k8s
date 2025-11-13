@@ -9,6 +9,11 @@ metadata:
 
 iam:
   withOIDC: true
+  identityMappings:
+    - arn: arn:aws:iam::123456789012:user/linuxautobot
+      username: linuxautobot
+      groups:
+        - system:masters  
 
 vpc:
   autoAllocateIPv6: false
@@ -24,6 +29,11 @@ addons:
     version: latest
   - name: metrics-server
     version: latest
+  - name: aws-load-balancer-controller
+    version: latest
+    attachPolicyARNs:
+      # Required IAM policy for ALB Controller
+      - arn:aws:iam::aws:policy/AWSLoadBalancerControllerIAMPolicy    
 
 managedNodeGroups:
   - name: arm-ng
