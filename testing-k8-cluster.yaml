@@ -1,0 +1,29 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: testing-eks-cluster
+  region: us-east-1
+  version: "1.32"
+
+addons:
+  - name: vpc-cni
+    version: latest
+    attachPolicyARNs:
+      - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
+managedNodeGroups:
+  - name: arm-ng
+    instanceType: m6g.medium
+    amiFamily: AmazonLinux2
+    desiredCapacity: 2
+    minSize: 1
+    maxSize: 3
+    ssh:
+      allow: false  # Disable SSH key access
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore        
+    tags:
+      Name: arm-ng
+      owner: linuxautobot
